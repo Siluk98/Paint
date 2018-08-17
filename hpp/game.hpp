@@ -13,13 +13,15 @@ public:
     Game();
     ~Game();
     void run();
-    sf::Window* getWindow();
+    static sf::Window* getWindow();
     static Game* getGame();
+    void addObject(Object*);
 private:
     static Game* instance;
     void init();
     void physics();
     void render();
+    Object* findObject(std::string id);
     std::vector<Object*> objects;
     gfxMgr* gfxmgr;
     eventMgr* eventmgr;
@@ -31,7 +33,7 @@ private:
     std::chrono::nanoseconds acc;
     std::chrono::nanoseconds tpf;
     sf::ContextSettings settings;
-    sf::RenderWindow* window;
+    static sf::RenderWindow* window;
 };
 
 #endif // GAME_H

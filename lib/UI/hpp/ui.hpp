@@ -23,5 +23,6 @@ namespace UI
 
 #include "range.hpp"
 #include "button.hpp"
+#include "canvas.hpp"
 
 #endif

@@ -17,6 +17,7 @@ public:
     sf::IntRect* getHitbox();
     sf::Sprite* getSprite();
     virtual void collide(Object*) = 0;
+    std::string getId();
 protected:
     virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const = 0;
     void updateTexture(sf::Sprite&);
@@ -34,6 +35,7 @@ protected:
     void addEvent(Predicate pred, std::string act);
     void addEvent(Predicate pred, Action act);
     void addAnimation(std::string name);
+    std::string id;
 };
 
 #endif // OBJECT_H

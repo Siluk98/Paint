@@ -15,6 +15,7 @@
 #include "../hpp/enemyBullet.hpp"
 
 Game* Game::instance = nullptr;
+sf::RenderWindow* Game::window = nullptr;
 
 Game::Game(){
     instance = this;
@@ -98,21 +99,82 @@ void Game::render()
 void Game::init()
 {
     settings.antialiasingLevel = 8;
-    window = new sf::RenderWindow(sf::VideoMode(800, 600), "Town Builder", sf::Style::Default, settings);
+    window = new sf::RenderWindow(sf::VideoMode(600, 700), "Town Builder", sf::Style::Default, settings);
 
     initDefaultActions(this->eventmgr);
     initDefaultPredicates(this, this->eventmgr);
 
-    for(int i=1;i<4;i++)
+    addObject(new UI::Button("btNew",2,2,"","gfx/btNew.png","gfx/btNewC.png",sf::Color::White,Action{
+                                     [](Object* a, Object* b, std::string arg1, std::string arg2){
+                                        Game* game = Game::getGame();
+                                        //std::cout << "create new canvas" << std::endl;
+                                        UI::Canvas* canvas = dynamic_cast<UI::Canvas*>(game->findObject("canvas"));
+                                        canvas->clear();
+                                     }}));
+    addObject(new UI::Button("btLoad",36,2,"","gfx/btLoad.png","gfx/btLoadC.png",sf::Color::White,Action{
+                                     [](Object* a, Object* b, std::string arg1, std::string arg2){
+                                        Game* game = Game::getGame();
+                                        //std::cout << "load from ppm" << std::endl;
+                                        UI::Canvas* canvas = dynamic_cast<UI::Canvas*>(game->findObject("canvas"));
+                                        canvas->load("pic.png");
+                                     }}));
+    addObject(new UI::Button("btSave",70,2,"","gfx/btSave.png","gfx/btSaveC.png",sf::Color::White,Action{
+                                     [](Object* a, Object* b, std::string arg1, std::string arg2){
+                                        Game* game = Game::getGame();
+                                        //std::cout << "save as ppm" << std::endl;
+                                        UI::Canvas* canvas = dynamic_cast<UI::Canvas*>(game->findObject("canvas"));
+                                        canvas->save("pic.png");
+                                     }}));
+
+    addObject(new UI::Canvas("canvas", 0,100, 600,600));
+    for(int i=0;i<3;i++)
     {
-        std::string id = "bt";
-        id+=std::to_string(i);
-        objects.push_back(new UI::Button(id,100*i, 100*i,"gfx/emptySlot.png","gfx/placeholder.png"));
-        //objects.push_back(new Background(100*i,100*i,true));
+        std::string color="colorbt";
+        std::string c="";
+
+        addObject(new UI::Button(color+std::to_string((i*3)+1),104+(i*3+1)*34,2,c+std::to_string(i),"","",sf::Color(0,0,85*(i+1)), Action{
+                                    [](Object* a, Object* b, std::string arg1, std::string arg2){
+                                        UI::Button* bt = dynamic_cast<UI::Button*>(a);
+                                        Game* game = Game::getGame();
+                                        UI::Canvas* canvas = dynamic_cast<UI::Canvas*>(game->findObject("canvas"));
+                                        std::cout << bt->getText();
+                                        canvas->setColor(0,0,85*(std::stoi(bt->getText())+1));
+                                        }}));
+        addObject(new UI::Button(color+std::to_string((i*3)+2),104+(i*3+2)*34,2,c+std::to_string(i),"","",sf::Color(0,85*(i+1),0), Action{
+                                    [](Object* a, Object* b, std::string arg1, std::string arg2){
+                                        UI::Button* bt = dynamic_cast<UI::Button*>(a);
+                                        Game* game = Game::getGame();
+                                        UI::Canvas* canvas = dynamic_cast<UI::Canvas*>(game->findObject("canvas"));
+                                        std::cout << bt->getText();
+                                        canvas->setColor(0,85*(std::stoi(bt->getText())+1),0);
+                                        }}));
+        addObject(new UI::Button(color+std::to_string(i*3),104+(i*3)*34,2,c+std::to_string(i),"","",sf::Color(85*(i+1),0,0), Action{
+                                    [](Object* a, Object* b, std::string arg1, std::string arg2){
+                                        UI::Button* bt = dynamic_cast<UI::Button*>(a);
+                                        Game* game = Game::getGame();
+                                        UI::Canvas* canvas = dynamic_cast<UI::Canvas*>(game->findObject("canvas"));
+                                        std::cout << bt->getText();
+                                        canvas->setColor(85*(std::stoi(bt->getText())+1),0,0);
+                                        }}));
     }
 
+    addObject(new UI::Button("brushUp",550,2,"","gfx/btBrushUp.png","gfx/btBrushUp.png",sf::Color::White,Action{
+                                [](Object* a, Object* b, std::string arg1, std::string arg2){
+                                    Game* game = Game::getGame();
+                                    UI::Canvas* canvas = dynamic_cast<UI::Canvas*>(game->findObject("canvas"));
+                                    canvas->brushUp();
+                                }
+                             }));
+
+    addObject(new UI::Button("brushDown",550,36,"","gfx/btBrushDown.png","gfx/btBrushDown.png",sf::Color::White,Action{
+                                [](Object* a, Object* b, std::string arg1, std::string arg2){
+                                    Game* game = Game::getGame();
+                                    UI::Canvas* canvas = dynamic_cast<UI::Canvas*>(game->findObject("canvas"));
+                                    canvas->brushDown();
+                                }
+                             }));
     //objects.push_back(new EnemyBullet(sf::Vector2f(300,200),&objects));
-    objects.push_back(new testObj(500, sf::Color(232,123,130)));
+    //objects.push_back(new testObj(500, sf::Color(232,123,130)));
 
     flag_loop = true;
 
@@ -124,3 +186,17 @@ void Game::init()
 
 sf::Window* Game::getWindow(){return window;}
 Game* Game::getGame(){return instance;}
+Object* Game::findObject(std::string id)
+{
+    for(Object* e:objects)
+    {
+        if(e->getId() == id) return e;
+    }
+    return nullptr;
+}
+
+void Game::addObject(Object* obj)
+{
+    if(findObject(obj->getId())==nullptr)
+        objects.push_back(obj);
+}

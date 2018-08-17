@@ -99,3 +99,5 @@ void Object::addAnimation(std::string name)
     animation.push_back(new Animation(currentTexture));
     animation.back() -> loadTexture(name);
 }
+
+std::string Object::getId(){return id;}

@@ -4357,7 +4357,7 @@
 	"object.hpp"
 	<SFML/Graphics.hpp>
 
-1534514610 d:\cpp\paint\hpp\object.hpp
+1534529817 d:\cpp\paint\hpp\object.hpp
 	"animation.hpp"
 	"customTypes.hpp"
 
@@ -4411,19 +4411,19 @@
 	"hpp/game.hpp"
 	<iostream>
 
-1531698715 d:\cpp\paint\hpp\game.hpp
+1534529817 d:\cpp\paint\hpp\game.hpp
 	<vector>
 	<chrono>
 	"object.hpp"
 	"eventMgr.hpp"
 
-1534514667 source:d:\cpp\paint\cpp\object.cpp
+1534529817 source:d:\cpp\paint\cpp\object.cpp
 	"../hpp/object.hpp"
 	<iostream>
 	"../hpp/event.hpp"
 	"../hpp/animation.hpp"
 
-1534515760 source:d:\cpp\paint\cpp\game.cpp
+1534534882 source:d:\cpp\paint\cpp\game.cpp
 	<SFML/Graphics.hpp>
 	<chrono>
 	<iostream>
@@ -4452,26 +4452,39 @@
 	"event.hpp"
 	"eventMgr.hpp"
 
-1534508233 d:\cpp\paint\lib\ui\hpp\ui.hpp
+1534525041 d:\cpp\paint\lib\ui\hpp\ui.hpp
 	"style.hpp"
 	"../../../hpp/object.hpp"
 	<functional>
 	"range.hpp"
 	"button.hpp"
+	"canvas.hpp"
 
 1532209876 d:\cpp\paint\lib\ui\hpp\style.hpp
 
 1534503649 d:\cpp\paint\lib\ui\hpp\range.hpp
 	"ui.hpp"
 
-1534508233 d:\cpp\paint\lib\ui\hpp\button.hpp
+1534534133 d:\cpp\paint\lib\ui\hpp\button.hpp
 	"ui.hpp"
+	"../../../hpp/customTypes.hpp"
 
-1534516291 source:d:\cpp\paint\lib\ui\cpp\button.cpp
+1534534133 source:d:\cpp\paint\lib\ui\cpp\button.cpp
 	"../hpp/button.hpp"
 	<iostream>
 	"../../../hpp/event.hpp"
 
 1534513449 d:\cpp\paint\hpp\customtypes.hpp
 	<type_traits>
+
+1534535548 source:d:\cpp\paint\lib\ui\cpp\canvas.cpp
+	"../hpp/Canvas.hpp"
+	<iostream>
+	"../../../hpp/event.hpp"
+	"../../../hpp/game.hpp"
+	<queue>
+
+1534535548 d:\cpp\paint\lib\ui\hpp\canvas.hpp
+	"ui.hpp"
+	"../../../hpp/customTypes.hpp"
 
