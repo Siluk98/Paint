@@ -1,0 +1,4 @@
+width: 100
+heigth : p  
+left : 100
+top : 200

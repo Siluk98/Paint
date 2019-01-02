@@ -1,7 +1,7 @@
 #include "../hpp/Canvas.hpp"
 #include <iostream>
-#include "../../../hpp/event.hpp"
-#include "../../../hpp/game.hpp"
+#include "../../Engine/hpp/event.hpp"
+#include "../../Engine/hpp/game.hpp"
 #include <queue>
 
 using namespace UI;
@@ -168,5 +168,19 @@ void Canvas::brushUp(){
     if(brushSize>brushMax)
     {
         brushSize = brushMax;
+    }
+}
+
+void Canvas::changeStyle(std::string atr, std::string val)
+{
+    if(val == "") return;
+    std::cout << id << ": " << atr << ": " << val << std::endl;
+    if(atr == "width")
+    {
+        std::cout << "aasasasasas";
+    }
+    if(atr == "height")
+    {
+       std::cout << "dcdcdcdcdc";
     }
 }

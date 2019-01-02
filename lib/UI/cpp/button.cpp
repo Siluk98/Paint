@@ -1,6 +1,6 @@
 #include "../hpp/button.hpp"
 #include <iostream>
-#include "../../../hpp/event.hpp"
+#include "../../Engine/hpp/event.hpp"
 
 using namespace UI;
 
@@ -40,6 +40,16 @@ Button::Button(std::string id, int left, int top,std::string text, std::string a
     std::cout << "btConstEnd: " << id << std::endl;
 }
 
+Button::Button(std::string id, cssHandler& css)
+{
+    this->id = id;
+    addAnimation("aaa.png");
+    currentAnimation = animation[0];
+    addSprite();
+    hitbox = new sf::IntRect(0,0,sprite->getTexture()->getSize().x,sprite->getTexture()->getSize().y);
+    applyStyle(css);
+}
+
 Button::~Button(){};
 
 void Button::update()
@@ -60,3 +70,32 @@ void Button::draw(sf::RenderTarget &target, sf::RenderStates s) const
 }
 
 std::string Button::getText(){return text;}
+
+void Button::changeStyle(std::string atr, std::string val)
+{
+    try
+    {
+        if(val == "") return;
+        std::cout << id << ": " << atr << ": " << val << std::endl;
+        if(atr == "width")
+        {
+            std::cout << "aasasasasas";
+        }
+        if(atr == "height")
+        {
+           std::cout << "dcdcdcdcdc";
+        }
+        if(atr == "top")
+        {
+            moveTo(hitbox->left,std::stoi(val));
+        }
+        if(atr == "left")
+        {
+            moveTo(std::stoi(val),hitbox->top);
+        }
+    }
+    catch(...)
+    {
+        std::cout << "Broken css" << std::endl;
+    }
+}

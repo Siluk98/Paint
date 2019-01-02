@@ -1,8 +1,8 @@
-#ifndef CANVAS_HPP
-#define CANVAS_HPP
+#ifndef UI_CANVAS_HPP
+#define UI_CANVAS_HPP
 
 #include "ui.hpp"
-#include "../../../hpp/customTypes.hpp"
+#include "../../Engine/hpp/customTypes.hpp"
 
 namespace UI
 {
@@ -15,6 +15,7 @@ namespace UI
         void draw(sf::RenderTarget &target, sf::RenderStates states) const;
         void update();
         void collide(Object*);
+        void changeStyle(std::string atr,std::string val);
         std::string create(std::string obj, std::string params);
         void clear();
         void save(std::string name);
