@@ -1,7 +1,7 @@
 #include "../hpp/Canvas.hpp"
 #include <iostream>
-#include "../../../hpp/event.hpp"
-#include "../../../hpp/game.hpp"
+#include "../../Engine/hpp/event.hpp"
+#include "../../Engine/hpp/game.hpp"
 #include <queue>
 
 using namespace UI;
@@ -26,6 +26,8 @@ Canvas::Canvas(std::string id, int left, int top, unsigned int width, unsigned i
     hitbox = new sf::IntRect(0,0,sprite->getTexture()->getSize().x,sprite->getTexture()->getSize().y);
     moveTo(left,top);
     this->id = id;
+    addType("canvas");
+    container = false;
     addEvent("MouseDown", Action{[](Object* a, Object* b, std::string arg1, std::string arg2){
                 UI::Canvas *c = dynamic_cast<Canvas*>(a);
                 sf::Vector2i mouse = sf::Mouse::getPosition(*Game::getWindow());
@@ -37,7 +39,7 @@ Canvas::Canvas(std::string id, int left, int top, unsigned int width, unsigned i
                 unsigned int brush = brushSize;
                 while(brush!=0)
                 {
-                    c->drawCircle(pos.x,pos.y,brush);
+                    c->drawDiamond(pos.x,pos.y,brush);
                     brush--;
                 }
              }});
@@ -95,6 +97,41 @@ void Canvas::drawCircle(int x0, int y0, int radius)
             dx += 2;
             err += dx - (radius << 1);
         }
+    }
+}
+
+void Canvas::drawDiamond(int x, int y, int r)
+{
+    drawspace->setPixel(x-1,y,paint);
+    if(x-r<0 || y-r<0 || x+r>width || y+r>height) return;
+    int cx = x-r;
+    int cy = y;
+    for(int j=r;j>0;j--)
+    {
+    for(int i=0;i<r-1;i++)
+    {
+        drawspace->setPixel(cx,cy,paint);
+        cx++;
+        cy--;
+    }
+    for(int i=0;i<r-1;i++)
+    {
+        drawspace->setPixel(cx,cy,paint);
+        cx++;
+        cy++;
+    }
+    for(int i=0;i<r-1;i++)
+    {
+        drawspace->setPixel(cx,cy,paint);
+        cx--;
+        cy++;
+    }
+    for(int i=0;i<r-1;i++)
+    {
+        drawspace->setPixel(cx,cy,paint);
+        cx--;
+        cy--;
+    }
     }
 }
 
@@ -168,5 +205,19 @@ void Canvas::brushUp(){
     if(brushSize>brushMax)
     {
         brushSize = brushMax;
+    }
+}
+
+void Canvas::changeStyle(std::string atr, std::string val)
+{
+    if(val == "") return;
+    std::cout << id << ": " << atr << ": " << val << std::endl;
+    if(atr == "width")
+    {
+        std::cout << "aasasasasas";
+    }
+    if(atr == "height")
+    {
+       std::cout << "dcdcdcdcdc";
     }
 }

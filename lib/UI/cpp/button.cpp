@@ -1,6 +1,6 @@
 #include "../hpp/button.hpp"
 #include <iostream>
-#include "../../../hpp/event.hpp"
+#include "../../Engine/hpp/event.hpp"
 
 using namespace UI;
 
@@ -20,6 +20,8 @@ Button::Button(std::string id, int left, int top,std::string text, std::string a
     this->id = id;
     isPressed = false;
     click = act;
+    container = true;
+    addType("button");
     addEvent("MouseDown", Action{[](Object* a, Object* b, std::string arg1, std::string arg2){
                 UI::Button *c = dynamic_cast<Button*>(a);
                 c->isPressed = true;
@@ -34,10 +36,41 @@ Button::Button(std::string id, int left, int top,std::string text, std::string a
                         c->isPressed = false;
                         c->currentAnimation = c->animation[0];
                         c->currentAnimation->animate();
-                        c->click(c, nullptr, "", "");
+                        if(c->click) c->click(c, nullptr, "", "");
                     }
              }});
     std::cout << "btConstEnd: " << id << std::endl;
+}
+
+Button::Button(std::string id, cssHandler& css,std::string text="",std::string active="bt.png", std::string press="bt.png", Action act = nullptr)
+{
+    this->id = id;
+    addAnimation(active);
+    addAnimation(press);
+    currentAnimation = animation[0];
+    addSprite();
+    hitbox = new sf::IntRect(0,0,sprite->getTexture()->getSize().x,sprite->getTexture()->getSize().y);
+    applyStyle(css);
+    click = act;
+    container = true;
+    addType("button");
+    addEvent("MouseDown", Action{[](Object* a, Object* b, std::string arg1, std::string arg2){
+                UI::Button *c = dynamic_cast<Button*>(a);
+                c->isPressed = true;
+                c->currentAnimation = c->animation[1];
+                c->currentAnimation->animate();
+             }});
+    addEvent("MouseUp", Action{[](Object* a, Object* b, std::string arg1, std::string arg2){
+                    Button *c = dynamic_cast<Button*>(a);
+                    if(c->isPressed)
+                    {
+                        std::cout << "click " << c->id << std::endl;
+                        c->isPressed = false;
+                        c->currentAnimation = c->animation[0];
+                        c->currentAnimation->animate();
+                        if(c->click) c->click(c, nullptr, "", "");
+                    }
+             }});
 }
 
 Button::~Button(){};
@@ -60,3 +93,49 @@ void Button::draw(sf::RenderTarget &target, sf::RenderStates s) const
 }
 
 std::string Button::getText(){return text;}
+
+void Button::changeStyle(std::string atr, std::string val)
+{
+    try
+    {
+        if(val == "") return;
+        std::cout << id << ": " << atr << ": " << val << std::endl;
+        int i = std::stoi(val);
+        if(atr == "width")
+        {
+            auto s = sprite->getScale();
+            auto bounds = sprite->getGlobalBounds();
+            float ns = i/bounds.width;
+            sprite->setScale(ns,s.y);
+            delete hitbox;
+            hitbox = new sf::IntRect(sprite->getGlobalBounds());
+        }
+        if(atr == "height")
+        {
+            auto s = sprite->getScale();
+            auto bounds = sprite->getGlobalBounds();
+            float ns = i/bounds.height;
+            sprite->setScale(s.x,ns);
+            delete hitbox;
+            hitbox = new sf::IntRect(sprite->getGlobalBounds());
+        }
+        if(atr == "top")
+        {
+            std::cout << sprite->getPosition().x << " " << i << std::endl;
+            moveTo(sprite->getPosition().x,i);
+        }
+        if(atr == "left")
+        {
+            std::cout << i << " " << sprite->getPosition().y << std::endl;
+            moveTo(i,sprite->getPosition().y);
+        }
+        if(atr == "color")
+        {
+
+        }
+    }
+    catch(...)
+    {
+        std::cout << "Broken css" << std::endl;
+    }
+}
